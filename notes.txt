@@ -1,0 +1,11 @@
+Client: 
+    
+    All working fine
+
+
+Server:
+    
+   1. ok so the mongo db part is not installing, 'cmd lines tools are too
+   outdated,do a sofware update from system  settings'
+   
+   2. d1one till `3. db connection`
