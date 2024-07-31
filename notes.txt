@@ -9,3 +9,13 @@ Server:
    outdated,do a sofware update from system  settings'
    
    2. d1one till `3. db connection`
+
+
+
+
+
+Tools:
+	1. curl
+	2. bat
+	3. cat
+	4. 
