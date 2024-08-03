@@ -11,6 +11,8 @@
   "author": "Indrranil Pawar",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.3",
+    "dotenv": "^16.4.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.25.1"

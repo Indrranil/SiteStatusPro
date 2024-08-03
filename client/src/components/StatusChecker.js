@@ -1,5 +1,6 @@
-// client/src/components/StatusChecker.js
+// fsd/client/src/components/StatusChecker.js
 import React, { useState } from "react";
+import axios from "axios";
 
 const StatusChecker = () => {
   const [url, setUrl] = useState("");
@@ -7,19 +8,19 @@ const StatusChecker = () => {
 
   const checkStatus = async () => {
     try {
-      const response = await fetch(
-        `/api/status?url=${encodeURIComponent(url)}`,
-      );
-      const data = await response.json();
-      setStatus(data);
+      const response = await axios.post("http://localhost:5001/api/status", {
+        url,
+      });
+      setStatus(response.data);
     } catch (error) {
-      console.error("Error fetching status:", error);
+      console.error(error);
+      setStatus({ message: "Error checking status" });
     }
   };
 
   return (
     <div>
-      <h1>Check Website Status</h1>
+      <h2>Check Website Status</h2>
       <input
         type="text"
         value={url}
@@ -29,7 +30,7 @@ const StatusChecker = () => {
       <button onClick={checkStatus}>Check Status</button>
       {status && (
         <div>
-          <h2>Status for {url}</h2>
+          <h3>Status:</h3>
           <p>{status.message}</p>
         </div>
       )}

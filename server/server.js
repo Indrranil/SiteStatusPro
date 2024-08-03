@@ -1,35 +1,33 @@
-// server/server.js
 const express = require("express");
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const connectDB = require("./config/db");
+const cors = require("cors");
+const { notFound, errorHandler } = require("./middleware/errorHandler"); // Corrected file name
+const statusRoutes = require("./routes/StatusRoutes");
+const reportRoutes = require("./routes/ReportRoutes");
+const outageRoutes = require("./routes/OutageRoutes");
 
-// Load environment variables
 dotenv.config();
-
-// Connect to database
-connectDB();
 
 const app = express();
 
-// Middleware to parse JSON
 app.use(express.json());
+app.use(cors());
 
-// Import routes
-const outageRoutes = require("./routes/OutageRoutes");
-const reportRoutes = require("./routes/ReportRoutes");
-const statusRoutes = require("./routes/StatusRoutes");
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log(`MongoDB Connected: ${process.env.MONGO_URI}`))
+  .catch((err) => console.error(err));
 
-// Use routes
-app.use("/api/outages", outageRoutes);
-app.use("/api/reports", reportRoutes);
 app.use("/api/status", statusRoutes);
+app.use("/api/reports", reportRoutes);
+app.use("/api/outages", outageRoutes);
 
-// Error handling middleware
-const { errorHandler } = require("./middleware/errorHandler");
-app.use(errorHandler);
+app.use(notFound); // Ensure these are valid middleware functions
+app.use(errorHandler); // Ensure these are valid middleware functions
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
