@@ -11,13 +11,17 @@ import "./index.css";
 
 function App() {
   return (
-    <div className="App bg-gray-100 min-h-screen flex flex-col">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
-      <main className="flex-grow">
-        <StatusChecker />
-        <CurrentOutages />
-        <ReportIssue />
-        <RecentOutages />
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <StatusChecker />
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <CurrentOutages />
+            <RecentOutages />
+            <ReportIssue />
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

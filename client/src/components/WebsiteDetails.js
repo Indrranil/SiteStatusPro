@@ -1,4 +1,3 @@
-// client/src/components/WebsiteDetails.js
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
@@ -10,6 +9,9 @@ const WebsiteDetails = () => {
     const fetchDetails = async () => {
       try {
         const response = await fetch(`http://localhost:5001/api/website/${id}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
         setDetails(data);
       } catch (error) {
@@ -26,12 +28,13 @@ const WebsiteDetails = () => {
       {details ? (
         <div>
           <p>Status: {details.status}</p>
-          <p>Outages: {details.outages}</p>
+          <p>Outages: {details.outages.length}</p>
           <p>History:</p>
           <ul>
-            {details.history.map((event) => (
-              <li key={event.timestamp}>
-                {event.timestamp}: {event.status}
+            {details.outages.map((outage) => (
+              <li key={outage._id}>
+                {new Date(outage.startedAt).toLocaleString()} -{" "}
+                {outage.isResolved ? "Resolved" : "Unresolved"}
               </li>
             ))}
           </ul>

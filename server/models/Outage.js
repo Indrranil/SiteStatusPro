@@ -1,4 +1,4 @@
-// fsd/server/models/OutageModel.js
+// server/models/OutageModel.js
 const mongoose = require("mongoose");
 
 const outageSchema = mongoose.Schema(
