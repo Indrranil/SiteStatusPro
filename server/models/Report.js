@@ -1,4 +1,3 @@
-// server/models/Report.js
 const mongoose = require("mongoose");
 
 const reportSchema = new mongoose.Schema({
@@ -6,8 +5,10 @@ const reportSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  issue: {
+  problemType: {
+    // Updated field name
     type: String,
+    enum: ["Error received", "Inaccessible", "Login", "Slow"],
     required: true,
   },
   user: {

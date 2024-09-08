@@ -1,9 +1,9 @@
 // fsd/server/routes/ReportRoutes.js
+// server/routes/ReportRoutes.js
 const express = require("express");
-const { reportIssue, getReports } = require("../controllers/ReportController");
 const router = express.Router();
+const ReportController = require("../controllers/ReportController");
 
-router.post("/", reportIssue);
-router.get("/", getReports);
+router.get("/reports/:website", ReportController.getReportsForWebsite);
 
 module.exports = router;

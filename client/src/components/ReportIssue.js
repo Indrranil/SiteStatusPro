@@ -1,73 +1,47 @@
 import React, { useState } from "react";
 
-const ReportIssue = () => {
-  const [website, setWebsite] = useState("");
-  const [issue, setIssue] = useState("");
-  const [user, setUser] = useState("");
-  const [country, setCountry] = useState("");
+const ReportIssue = ({ website }) => {
+  const [selectedProblem, setSelectedProblem] = useState("");
 
-  const reportIssue = async () => {
+  const handleReport = async () => {
     try {
-      // Debugging: Log the data being sent
-      console.log({ website, issue, user, country });
-
-      const response = await fetch("http://localhost:5001/api/reports", {
+      const response = await fetch("http://localhost:5001/api/report", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ website, issue, user, country }), // Ensure 'issue' is included
+        body: JSON.stringify({ website, problemType: selectedProblem }),
       });
-      const data = await response.json();
-      console.log("Issue reported:", data);
+      if (response.ok) {
+        alert("Issue reported!");
+      } else {
+        alert("Error reporting issue.");
+      }
     } catch (error) {
-      console.error("Error reporting issue:", error);
+      console.error("Error:", error);
     }
   };
 
   return (
-    <div className="container report-issue-container">
-      <h1 className="report-issue-title">Report an Issue</h1>
-      <form className="report-issue-form">
-        <div className="form-group">
-          <input
-            type="text"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-            placeholder="Enter website URL"
-            className="form-input"
-          />
-        </div>
-        <div className="form-group">
-          <textarea
-            value={issue}
-            onChange={(e) => setIssue(e.target.value)}
-            placeholder="Describe the issue"
-            className="form-textarea"
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="text"
-            value={user}
-            onChange={(e) => setUser(e.target.value)}
-            placeholder="Enter your name"
-            className="form-input"
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            placeholder="Enter your country"
-            className="form-input"
-          />
-        </div>
-        <button onClick={reportIssue} className="submit-button">
-          Report Issue
-        </button>
-      </form>
+    <div>
+      <h2>What problem are you having with {website}?</h2>
+      <div>
+        {["Error received", "Inaccessible", "Login", "Slow"].map((problem) => (
+          <button
+            key={problem}
+            onClick={() => setSelectedProblem(problem)}
+            className="m-1 p-2 bg-blue-500 text-white rounded"
+          >
+            {problem}
+          </button>
+        ))}
+      </div>
+      <button
+        onClick={handleReport}
+        className="mt-2 p-2 bg-green-500 text-white rounded"
+      >
+        Report
+      </button>
     </div>
   );
 };

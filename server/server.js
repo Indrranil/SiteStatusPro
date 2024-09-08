@@ -6,6 +6,7 @@ const { notFound, errorHandler } = require("./middleware/errorHandler"); // Ensu
 const statusRoutes = require("./routes/StatusRoutes");
 const reportRoutes = require("./routes/ReportRoutes");
 const outageRoutes = require("./routes/OutageRoutes");
+const websitesRouter = require("./routes/websites");
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ mongoose
 app.use("/api/status", statusRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/outages", outageRoutes);
+app.use("/api/websites", websitesRouter);
 
 // Error Handling Middleware
 app.use(notFound);
