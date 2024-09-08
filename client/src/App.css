@@ -1,3 +1,4 @@
-.App {
-    text-align: center;
-}
+/* src/index.css */
+
+/* Import the global styles that include Tailwind CSS directives */
+@import "./styles/global.css";

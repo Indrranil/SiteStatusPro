@@ -1,20 +1,29 @@
-// server/models/Outage.js
+// fsd/server/models/OutageModel.js
 const mongoose = require("mongoose");
 
-const outageSchema = new mongoose.Schema({
-  website: {
-    type: String,
-    required: true,
+const outageSchema = mongoose.Schema(
+  {
+    website: {
+      type: String,
+      required: true,
+    },
+    startedAt: {
+      type: Date,
+      required: true,
+    },
+    resolvedAt: {
+      type: Date,
+      required: false,
+    },
+    isResolved: {
+      type: Boolean,
+      default: false,
+    },
   },
-  status: {
-    type: String,
-    required: true,
+  {
+    timestamps: true, // Automatically manage createdAt and updatedAt fields
   },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+);
 
 const Outage = mongoose.model("Outage", outageSchema);
 

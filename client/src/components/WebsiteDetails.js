@@ -9,7 +9,7 @@ const WebsiteDetails = () => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const response = await fetch(`/api/website/${id}`);
+        const response = await fetch(`http://localhost:5001/api/website/${id}`);
         const data = await response.json();
         setDetails(data);
       } catch (error) {

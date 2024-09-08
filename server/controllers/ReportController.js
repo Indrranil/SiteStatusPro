@@ -3,8 +3,8 @@ const Report = require("../models/Report");
 
 exports.reportIssue = async (req, res) => {
   try {
-    const { website, issueType, user, country } = req.body;
-    const newReport = new Report({ website, issueType, user, country });
+    const { website, issue, user, country } = req.body;
+    const newReport = new Report({ website, issue, user, country });
     await newReport.save();
     res.status(201).json(newReport);
   } catch (error) {

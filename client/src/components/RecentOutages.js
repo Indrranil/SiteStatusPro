@@ -7,7 +7,9 @@ const RecentOutages = () => {
   useEffect(() => {
     const fetchOutages = async () => {
       try {
-        const response = await fetch("/api/outages/recent");
+        const response = await fetch(
+          "http://localhost:5001/api/outages/recent",
+        );
         const data = await response.json();
         setOutages(data);
       } catch (error) {

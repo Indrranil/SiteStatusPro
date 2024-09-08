@@ -1,8 +1,17 @@
-frontend and backend code is done,
 
-getting error on pressing button status, on frontend , check for the error
 
-also db that we have created has no row tabels etc 'appdb'
+-Primary Functionality:
+1. Fix 'Website is down', it only shows op for success 'Website is up' but is it is down it shows 'Error checking status'
+2. TO RIGHT UPPER PART -> Outages right now
+3. TO RIGHT BELOW PART -> Recent Outagess and Problems
+4. Bottom part "Websites that we monitor"
+
+
+1.
+
+
+
+
 
 
 
@@ -10,4 +19,4 @@ also db that we have created has no row tabels etc 'appdb'
 Tools:
 	1. curl
 	2. bat
-	3   tre
+	3  tree
