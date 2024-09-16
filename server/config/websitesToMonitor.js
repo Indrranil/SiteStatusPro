@@ -48,5 +48,6 @@ module.exports = [
   { name: "Heroku", url: "https://www.heroku.com" },
   { name: "Vercel", url: "https://www.vercel.com" },
   { name: "Netlify", url: "https://www.netlify.com" },
+  { name: "Management-System", url: "https://management-system.streamlit.app" },
   { name: "Cloudflare", url: "https://www.cloudflare.com" },
 ];
