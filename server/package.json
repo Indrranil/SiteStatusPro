@@ -11,12 +11,24 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@node-redis/client": "^1.0.6",
     "axios": "^1.7.2",
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "mongoose": "^8.5.1",
-    "node-cron": "^3.0.3"
+    "express": "^4.21.1",
+    "express-async-handler": "^1.2.0",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "https": "^1.0.0",
+    "mongoose": "^8.7.3",
+    "morgan": "^1.10.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.15",
+    "rate-limit-redis": "^4.2.0",
+    "redis": "^4.7.0",
+    "tls": "^0.0.1",
+    "whois-json": "^2.0.4"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
