@@ -6,18 +6,21 @@ const reportSchema = new mongoose.Schema({
     required: true,
   },
   problemType: {
-    // Updated field name
     type: String,
     enum: ["Error received", "Inaccessible", "Login", "Slow"],
     required: true,
   },
   user: {
     type: String,
-    required: true,
+    required: false, // Now optional since we have isAnonymous
   },
   country: {
     type: String,
-    required: true,
+    required: false, // Also optional
+  },
+  isAnonymous: {
+    type: Boolean,
+    default: false, // Default is false, so reports are considered non-anonymous by default
   },
   timestamp: {
     type: Date,

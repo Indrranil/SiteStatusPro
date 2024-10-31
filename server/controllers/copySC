@@ -1,0 +1,126 @@
+const axios = require("axios");
+const Outage = require("../models/Outage");
+const Report = require("../models/Report");
+const Status = require("../models/Status");
+
+const CONFIG = {
+  timeouts: {
+    request: 10000,
+  },
+  acceptableStatusCodes: [200, 201, 202, 203, 204, 206, 301, 302, 307, 308],
+  browserHeaders: {
+    "User-Agent":
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    Accept:
+      "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+  },
+};
+
+const StatusController = {
+  // Check status of a single website
+  async checkStatus(url) {
+    try {
+      const start = Date.now();
+      const response = await axios.get(url, {
+        headers: CONFIG.browserHeaders,
+        timeout: CONFIG.timeouts.request,
+        validateStatus: null,
+      });
+      const duration = Date.now() - start;
+
+      const status = {
+        website: url,
+        timestamp: new Date(),
+        status: CONFIG.acceptableStatusCodes.includes(response.status)
+          ? "Up"
+          : "Down",
+        statusCode: response.status,
+        responseTime: duration,
+      };
+
+      await Status.create(status);
+      return status;
+    } catch (error) {
+      const errorStatus = {
+        website: url,
+        timestamp: new Date(),
+        status: "Down",
+        error: {
+          type: error.code || "UNKNOWN_ERROR",
+          message: error.message,
+        },
+      };
+
+      await Status.create(errorStatus);
+      return errorStatus;
+    }
+  },
+
+  // Check status of multiple websites
+  async checkBatchStatus(urls) {
+    return Promise.all(urls.map((url) => this.checkStatus(url)));
+  },
+
+  // Get metrics for a website
+  async getWebsiteMetrics(website, period = "24h") {
+    const timeframe = this.getTimeframe(period);
+    const statuses = await Status.find({
+      website,
+      timestamp: { $gte: timeframe },
+    }).sort({ timestamp: -1 });
+
+    return {
+      website,
+      period,
+      uptime: this.calculateUptime(statuses),
+      responseTime: this.calculateAverageResponseTime(statuses),
+      checks: {
+        total: statuses.length,
+        up: statuses.filter((s) => s.status === "Up").length,
+        down: statuses.filter((s) => s.status === "Down").length,
+      },
+      lastChecked: statuses[0]?.timestamp,
+    };
+  },
+
+  // Get status history
+  async getStatusHistory(website, days = 7) {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - parseInt(days, 10));
+
+    const history = await Status.find({
+      website,
+      timestamp: { $gte: startDate },
+    }).sort({ timestamp: -1 });
+
+    return history;
+  },
+
+  // Utility methods (make sure these are defined)
+  getTimeframe(period) {
+    const now = new Date();
+    if (period === "24h") {
+      return new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    }
+    // Additional period handling can be added here
+    return now;
+  },
+
+  calculateUptime(statuses) {
+    const totalChecks = statuses.length;
+    const upChecks = statuses.filter((s) => s.status === "Up").length;
+    return totalChecks > 0 ? (upChecks / totalChecks) * 100 : 0;
+  },
+
+  calculateAverageResponseTime(statuses) {
+    const upStatuses = statuses.filter((s) => s.status === "Up");
+    const totalResponseTime = upStatuses.reduce(
+      (acc, s) => acc + s.responseTime,
+      0,
+    );
+    return upStatuses.length > 0 ? totalResponseTime / upStatuses.length : 0;
+  },
+};
+
+module.exports = StatusController;

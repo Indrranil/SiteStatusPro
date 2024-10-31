@@ -1,4 +1,3 @@
-// server/models/OutageModel.js
 const mongoose = require("mongoose");
 
 const outageSchema = mongoose.Schema(
@@ -6,6 +5,7 @@ const outageSchema = mongoose.Schema(
     website: {
       type: String,
       required: true,
+      index: true,
     },
     startedAt: {
       type: Date,
@@ -13,17 +13,38 @@ const outageSchema = mongoose.Schema(
     },
     resolvedAt: {
       type: Date,
-      required: false,
+      default: null,
     },
     isResolved: {
       type: Boolean,
       default: false,
+      index: true,
+    },
+    duration: {
+      type: Number,
+      default: 0,
+    },
+    statusCode: {
+      type: Number,
+      required: false,
+    },
+    error: {
+      type: String,
+      required: false,
+    },
+    errorType: {
+      type: String,
+      enum: ["timeout", "network", "other", null],
+      default: null,
     },
   },
   {
-    timestamps: true, // Automatically manage createdAt and updatedAt fields
+    timestamps: true,
   },
 );
+
+// Add compound index for common queries
+outageSchema.index({ website: 1, isResolved: 1 });
 
 const Outage = mongoose.model("Outage", outageSchema);
 
