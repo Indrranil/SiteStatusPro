@@ -24,6 +24,7 @@ import {
   ShieldX,
 } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import DomainExpiryDashboard from "./DomainExpiryDashboard";
 
 Chart.register(
   CategoryScale,
@@ -483,6 +484,16 @@ const WebsiteDetails = () => {
               </div>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Domain Expiry Section */}
+      <Card className="mb-6">
+        <CardHeader>
+          <h2 className="text-xl font-semibold">Domain Information</h2>
+        </CardHeader>
+        <CardContent>
+          <DomainExpiryDashboard website={website} />
         </CardContent>
       </Card>
 
