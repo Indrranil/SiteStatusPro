@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const { monitorPerformance } = require("./services/performanceMonitor");
 const SSLCertificateMonitor = require("./services/SSLCertificateMonitor");
+const domainMonitorService = require("./services/domainMonitorService");
 const rateLimit = require("express-rate-limit");
 const cron = require("node-cron");
 
@@ -25,6 +26,7 @@ const SERVER_CONFIG = {
   performanceMonitoringInterval:
     process.env.PERF_MONITOR_INTERVAL || 5 * 60 * 1000, // 5 minutes
   sslCheckInterval: process.env.SSL_CHECK_INTERVAL || "0 */12 * * *", // Twice daily
+  domainCheckInterval: process.env.DOMAIN_CHECK_INTERVAL || "0 0 * * *", // Daily
 };
 
 // Initialize express app
@@ -99,6 +101,7 @@ app.get("/api/health", (req, res) => {
     monitors: {
       performance: true,
       ssl: true,
+      domain: true,
     },
   };
 
@@ -115,7 +118,8 @@ const routes = {
   notifications: require("./routes/NotificationRoutes"),
   performance: require("./routes/PerformanceRoutes"),
   analytics: require("./routes/AnalyticsRoutes"),
-  ssl: require("./routes/SSLRoutes"), // New SSL routes
+  ssl: require("./routes/SSLRoutes"),
+  domains: require("./routes/DomainRoutes"), // New domain routes
 };
 
 // API Router with versioning
@@ -202,6 +206,30 @@ const initializeMonitors = () => {
         console.log("SSL certificate check completed");
       } catch (error) {
         console.error("SSL certificate monitoring failed:", error);
+      }
+    },
+  );
+
+  // Initialize domain monitoring
+  monitors.jobs.domain = cron.schedule(
+    SERVER_CONFIG.domainCheckInterval,
+    async () => {
+      try {
+        console.log("Starting scheduled domain expiration check...");
+        const websitesToMonitor = require("./config/websitesToMonitor");
+
+        for (const website of websitesToMonitor) {
+          try {
+            const domain = new URL(website.url).hostname;
+            await domainMonitorService.monitorDomain(website.name, domain);
+          } catch (error) {
+            console.error(`Failed to check domain for ${website.name}:`, error);
+          }
+        }
+
+        console.log("Domain expiration check completed");
+      } catch (error) {
+        console.error("Domain monitoring failed:", error);
       }
     },
   );
