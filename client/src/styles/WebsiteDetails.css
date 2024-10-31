@@ -1,0 +1,110 @@
+.website-details {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.website-details h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.website-details h2 {
+    font-size: 20px;
+    color: #333;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.status-message {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.status-message.up {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+    color: #155724;
+}
+
+.status-message.down {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+    color: #721c24;
+}
+
+.last-outage {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.problem-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.problem-buttons button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.problem-buttons .error {
+    background-color: #dc3545;
+}
+.problem-buttons .inaccessible {
+    background-color: #ffc107;
+}
+.problem-buttons .login {
+    background-color: #007bff;
+}
+.problem-buttons .slow {
+    background-color: #28a745;
+}
+
+.chart-container {
+    height: 300px;
+    margin-bottom: 30px;
+}
+
+.recent-reports ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.recent-reports li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.country-flag {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.country-flag.it {
+    background-color: #009246;
+}
+.country-flag.us {
+    background-color: #3c3b6e;
+}
+
+.report-time {
+    font-weight: bold;
+    margin-right: 5px;
+}

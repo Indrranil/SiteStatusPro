@@ -5,7 +5,7 @@ const ReportIssue = ({ website }) => {
 
   const handleReport = async () => {
     try {
-      const response = await fetch("http://localhost:5001/api/report", {
+      const response = await fetch("http://localhost:5001/api/v1/report", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

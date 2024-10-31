@@ -1,4 +1,73 @@
-/* src/index.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
 
-/* Import the global styles that include Tailwind CSS directives */
-@import "./styles/global.css";
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-header {
+    background-color: #8e44ad;
+    color: white;
+    padding: 10px 0;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header-content a {
+    color: white;
+    text-decoration: none;
+}
+
+.app-nav {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.app-nav ul {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    list-style-type: none;
+    display: flex;
+}
+
+.app-nav li {
+    margin-right: 20px;
+}
+
+.app-nav a {
+    color: #495057;
+    text-decoration: none;
+}
+
+.app-main {
+    flex-grow: 1;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.app-footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}

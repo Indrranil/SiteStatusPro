@@ -7,7 +7,7 @@ const CurrentOutages = () => {
     const fetchOutages = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5001/api/outages/current",
+          "http://localhost:5001/api/v1/outages/current",
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

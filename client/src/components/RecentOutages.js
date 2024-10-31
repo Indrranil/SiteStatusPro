@@ -1,26 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const RecentOutages = () => {
-  const [outages, setOutages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [outages, setOutages] = React.useState([]);
+  const [error, setError] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchOutages = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5001/api/outages/recent",
+          "http://localhost:5001/api/v1/outages/recent",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // Handles authentication if needed
+          },
         );
+
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         const data = await response.json();
-        // Deduplicate outages based on website and sort by 'startedAt'
-        const deduplicatedData = Array.from(
-          new Map(data.map((outage) => [outage.website, outage])).values(),
-        ).sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt));
-        setOutages(deduplicatedData);
-      } catch (error) {
-        console.error("Error fetching outages:", error);
+        setOutages(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError("Failed to fetch outages. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -29,51 +38,45 @@ const RecentOutages = () => {
     fetchOutages();
   }, []);
 
-  const timeSince = (timestamp) => {
-    const date = new Date(timestamp);
-    const now = Date.now();
-    const diffInMinutes = Math.floor((now - date) / 60000);
-    const diffInHours = Math.floor(diffInMinutes / 60);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
+      </div>
+    );
+  }
 
-    if (diffInMinutes < 60) {
-      return `${diffInMinutes} minutes ago`;
-    } else if (diffInHours < 24) {
-      return `${diffInHours} hours ago`;
-    } else {
-      const diffInDays = Math.floor(diffInHours / 24);
-      return `${diffInDays} days ago`;
-    }
-  };
+  if (error) {
+    return (
+      <Alert variant="destructive" className="m-4">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (!outages.length) {
+    return (
+      <Alert className="m-4">
+        <AlertDescription>No recent outages found.</AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
-    <div>
-      <h1 className="text-lg font-semibold mb-2">
-        Recent Outages and Problems
-      </h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : outages.length === 0 ? (
-        <p>No recent outages.</p>
-      ) : (
-        <ul className="space-y-2">
-          {outages.map((outage) => (
-            <li
-              key={outage._id}
-              className="flex justify-between items-center bg-gray-100 p-2 rounded"
-            >
-              <a
-                href={`/website/${outage.website}`}
-                className="text-blue-600 hover:underline"
-              >
-                {outage.website}
-              </a>
-              <span className="text-sm text-gray-600">
-                {timeSince(outage.startedAt)}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">Recent Outages</h2>
+      <div className="space-y-4">
+        {outages.map((outage, index) => (
+          <div key={index} className="border rounded p-4 shadow-sm bg-white">
+            <h3 className="font-medium">{outage.title}</h3>
+            <p className="text-gray-600">{outage.description}</p>
+            <div className="mt-2 text-sm text-gray-500">
+              {new Date(outage.timestamp).toLocaleString()}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
